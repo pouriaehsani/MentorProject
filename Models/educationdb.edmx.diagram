@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="3e89034b4426443e8f037c870075a18f" Name="Diagram1">
+        <EntityTypeShape EntityType="schooldb.Table_category" Width="1.5" PointX="4.875" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="schooldb.Table_events" Width="1.5" PointX="6.75" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="schooldb.table_student" Width="1.5" PointX="8.75" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="schooldb.Table_teacher" Width="1.5" PointX="1" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="schooldb.tbl_admins" Width="1.5" PointX="6.5" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="schooldb.Tbl_img" Width="1.5" PointX="0.875" PointY="2.75" />
+        <EntityTypeShape EntityType="schooldb.Tbl_course" Width="1.5" PointX="3.125" PointY="0.5" />
+        <AssociationConnector Association="schooldb.FK_Tbl_course_Tbl_category" />
+        <AssociationConnector Association="schooldb.FK_Tbl_course_Tbl_teacher" />
+        <AssociationConnector Association="schooldb.FK_Tbl_course_Tbl_img" />
+        <EntityTypeShape EntityType="schooldb.View_courses" Width="1.5" PointX="10.875" PointY="1" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
