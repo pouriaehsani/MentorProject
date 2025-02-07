@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Services.Description;
 using mentorproject.Models;
+using System.Web.Security;
+using System.IO;
+using System.Web.Helpers;
 
 namespace mentorproject.Controllers
 {
@@ -51,7 +55,11 @@ namespace mentorproject.Controllers
             {
                 if (user.password == pass)
                 {
-                    Response.Cookies["lc"].Value = user.pkID.ToString();
+
+                    var cookietext = Encoding.UTF8.GetBytes(user.pkID.ToString());
+                    var encryptionValue = Convert.ToBase64String(MachineKey.Protect(cookietext));
+                    
+                    Response.Cookies["lc"].Value = encryptionValue;
                     Response.Cookies["lc"].Expires = DateTime.Now.AddDays(100); 
                     status = 3;     //username and password is correct...
                 }
@@ -100,20 +108,94 @@ namespace mentorproject.Controllers
             
         }
 
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult deleteCourses(int id) {
+
             try
             {
-                var c = context.Tbl_course.Where(x => x.pkID == id).Single();
-                context.Tbl_course.Remove(c);
-                context.SaveChanges();
+                var courseData = context.Tbl_course.Where(x=> x.pkID==id).Single();
+                context.Tbl_course.Remove(courseData);
+                //context.SaveChanges();
 
                 return Json(new { status = true, m = "" }, JsonRequestBehavior.AllowGet);
+
             }
             catch (Exception ex) {
                 return Json(new { status = false, m = ex.Message }, JsonRequestBehavior.AllowGet);
             }
-       
+
+        }
+
+
+        
+        [HttpPost]
+        
+        public ActionResult editCourseImg(int imgpkID,int coursepkID, string imgTitle, string imgAlt, HttpPostedFileBase imgsrc) {
+            string fileName = "";
+            if (validation()) {
+                try
+                {
+                    var imgFileName = context.Tbl_img.Where(x=> x.pkID == imgpkID).Single();
+
+                    if (imgsrc != null)
+                    {
+
+                        if (imgsrc.ContentLength > 10000 && imgsrc.ContentLength < 10000000)
+                        {
+                            var prefixName = imgsrc.FileName.Split('.');
+                            fileName = Path.GetFileName("ci_" + coursepkID.ToString()+"."+ prefixName[1]);
+                            var path = Path.Combine(Server.MapPath("~/AdminAssets/img/ImgCourse"), fileName);
+                            imgsrc.SaveAs(path);
+                            imgFileName.address = fileName;
+                        }
+                        else
+                        {
+                            return Json(new { status = false, message="فایل آپلود شده میبایست بین 10 کیلوبایت تا 10 مگابایت باشد..." }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    
+                        imgFileName.title = imgTitle;
+                        imgFileName.alt = imgAlt;
+                        context.SaveChanges();
+                    return Json(new { status = true, message = "ویرایش انجام شد...",reff = imgFileName.address }, JsonRequestBehavior.AllowGet);
+
+
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { status = false, ex.Message }, JsonRequestBehavior.AllowGet);
+                }
+
+            }
+
+            return Json(new { status = false, message = "validation failed!!!" }, JsonRequestBehavior.AllowGet);
+        }
+
+        private bool validation()
+        {
+
+            if (Request.Cookies["lc"].Value == "null") { Response.Redirect("~/admin/login"); }
+            if (Request.Cookies["lc"].Value == "") { Response.Redirect("~/Home/login"); }
+
+            var bytes = Convert.FromBase64String(Request.Cookies["lc"].Value);
+            var output = MachineKey.Unprotect(bytes);
+            string result = Encoding.UTF8.GetString(output);
+            int userID = int.Parse(result);
+
+            var user = context.tbl_admins.Where(x => x.pkID == userID).FirstOrDefault();
+
+            if (user.pkID == 1)
+            {
+                return true;
+            }
+
+            else { 
+                return false;
+            }
         }
     }
 
+    
 }

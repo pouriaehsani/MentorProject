@@ -161,14 +161,14 @@
             $(".form-control").on("change", function () {
 
                 if ($(this).val().length > 0) {
-                    console.log("hi");
+                    
                     $(this).parent().children(".invalid-feedback").css("display", "none");
 
                     $(this).removeClass("myinvalidcolor");
                     $(this).addClass("myvalidcolor");
                 }
                 if ($(this).val().length == 0) {
-                    console.log("good");
+                    
                     $(this).parent().children(".invalid-feedback").css("display", "block");
                     $(this).addClass("myinvalidcolor");
                 }

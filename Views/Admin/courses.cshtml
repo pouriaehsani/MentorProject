@@ -7,10 +7,7 @@
 }
 
 <h2>دوره ها</h2>
-<div class="alert success col-lg-5">
-    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-    <p id="demo"></p>
-</div>
+
 <div class="row" style="display: flex; flex-direction: column; align-items: flex-end; margin: 5px;">
     <section class="section">
         <div class="col-lg-10">
@@ -22,7 +19,7 @@
                     @foreach (var item in ViewBag.courses)
                     {
 
-                        <div class="accordion" id="accordionExample">
+                        <div class="accordion acc_@item.pkID" id="accordionExample">
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="heading">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne_@item.pkID" aria-expanded="false" aria-controls="collapseOne">
@@ -124,14 +121,14 @@
 
                                                                     <button id="btn_submit_@item.pkID" type="button" class="btn btn-primary submitbtn">تایید اطلاعات</button>
                                                                     <button id="btn_delete_@item.pkID" type="button" class="btn btn-danger delbtn" style="margin-right:15px">حذف دوره</button>
-                                                                    <i class="bi bi-check-circle-fill submit_note " style=" margin-right: 10px; margin-top: 10px; margin-left: 5px;"></i>
+                                                                    
 
                                                                     <div class=" submit_note" style=" font-size: 14px; font-weight: bold; display: flex; align-items: center; justify-content: center;">
 
                                                                         <p  style=" margin-top: 12px; margin-left: 10px;" id="sub_message_@item.pkID"></p>
 
                                                                     </div>
-                                                                    <i class="bi bi-x-circle-fill submit_note" style=" margin-right: 10px; margin-top: 10px; margin-left: 5px;"></i>
+                                                                    
 
 
 
@@ -144,28 +141,46 @@
                                                     <div class="tab-pane fade" id="tab2_@item.pkID" role="tabpanel" aria-labelledby="profile-tab">
                                                         <div class="row">
                                                             <div class="image-container col-sm-6">
-                                                                <img class="ImSticky" src="~/assets/img/@item.address" width="400" alt="@item.alt" title="@item.imgTitle" />
+                                                                <img id="imgTag" class="ImSticky" src="~/AdminAssets/img/ImgCourse/@item.address" width="400" alt="@item.alt" title="@item.imgTitle" />
                                                             </div>
-                                                            <form class="col-sm-6">
+
+
+                                                            <form class="col-sm-6" enctype="multipart/form-data" id="formData">
+                                                                <div style="display:none" class="row mb-3">
+                                                                    <label for="inputText" class="col-sm-12 col-form-label">شناسه عکس</label>
+                                                                    <div class="col-sm-12">
+                                                                        <input type="text" name="imgpkID" class="form-control" value="@item.pkID">
+                                                                    </div>
+                                                                </div>
+                                                                <div style="display:none" class="row mb-3">
+                                                                    <label for="inputText" class="col-sm-12 col-form-label"> شناسه دوره</label>
+                                                                    <div class="col-sm-12">
+                                                                        <input type="text" name="coursepkID" class="form-control" value="@item.pkID">
+                                                                    </div>
+                                                                </div>
                                                                 <div class="row mb-3">
                                                                     <label for="inputNumber" class="col-sm-12 col-form-label">بارگزاری عکس</label>
                                                                     <div class="col-sm-12">
-                                                                        <input class="form-control" type="file" id="formFile cimag_@item.pkID" value="@item.fkImg">
+                                                                        <input class="form-control" type="file" name="imgsrc" id="formFile cimag_@item.pkID" value="@item.fkImg">
                                                                     </div>
                                                                 </div>
                                                                 <div class="row mb-3">
                                                                     <label for="inputText" class="col-sm-12 col-form-label">عنوان عکس</label>
                                                                     <div class="col-sm-12">
-                                                                        <input id="it_@item.pkID" type="text" class="form-control" value="@item.imgTitle">
+                                                                        <input id="it_@item.pkID" type="text" name="imgTitle" class="form-control" value="@item.imgTitle">
                                                                     </div>
                                                                 </div>
                                                                 <div class="row mb-3">
                                                                     <label for="inputText" class="col-sm-12 col-form-label">تک</label>
                                                                     <div class="col-sm-12">
-                                                                        <input id="ca_@item.pkID" type="text" class="form-control" value="@item.alt">
+                                                                        <input id="ca_@item.pkID" type="text" name="imgAlt" class="form-control" value="@item.alt">
                                                                     </div>
                                                                 </div>
+
+                                                                <button id="imgCourseConfirm" type="submit" class="btn btn-primary ">تایید اطلاعات</button>
                                                             </form>
+
+
                                                         </div>
 
                                                     </div>
@@ -191,8 +206,7 @@
 
 @section BeforeScripts {
     <script>
-        $(".bi-check-circle-fill").hide();    //colors for signs in submits
-        $(".bi-x-circle-fill").hide();
+
 
 
         $(".submitbtn").click(function () {    //when button clicks
@@ -215,22 +229,21 @@
 
 
             $('.submit_note').css('color', 'blue');  //colors for signs in submits
-            //$(".bi-check-circle-fill").hide();
-            //$(".bi-x-circle-fill").hide();
+
             $(`#sub_message_${split[2]}`).html("در حال برقرار ارتباط با سرور");
             $.post("/admin/editCourses", { ct: ct, cdis: cdis, cm: cm[1], cc: cc[1], cs: cs, cID: split[2]})     //posting dada to adminControler for process
 
                 .done(function (res) {          //the operations after returning result
                     if (res.status) {
                         $('.submit_note').css('color', 'green');
-                        $(".bi-check-circle-fill").show();
+
                         $(`#sub_message_${split[2]}`).html("تغییرات ثبت شد...");
 
                     }
                     else {
                         $('.submit_note').css('color', 'red');
                         $('.submit_note').css('direction', 'ltr');
-                        $(".bi-x-circle-fill").show();
+
                         $(`#sub_message_${split[2]}`).html(res.m);
 
                     }
@@ -243,59 +256,130 @@
 
                 .always(function () {
                     $(".submitbtn .delbtn").prop("disabled", false);
-                    $(".bi-check-circle-fill").hide();
-                    $(".bi-x-circle-fill").hide();
+
 
                 });
 
         });
 
-        $(".alert").hide();
+
         $(".delbtn").click(function () {
 
-            $(".submitbtn .delbtn").prop("disabled", true);
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: "btn btn-success",
+                    cancelButton: "btn btn-danger"
+                },
+                buttonsStyling: false
+            });
+            swalWithBootstrapButtons.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel!",
+                reverseButtons: true
+            })
+            .then((result) => {
+                if (result.isConfirmed) {
+                    $(".submitbtn .delbtn").prop("disabled", true);
 
-            var thisID = $(this).attr("id");
-            var split = thisID.split("_");
-            console.log(split[2]);
+                    var thisID = $(this).attr("id");
+                    var split = thisID.split("_")
+                    $(`#sub_message_${split[2]}`).html("در حال برقرار ارتباط با سرور");
+                    $.post("/admin/deleteCourses", { id: split[2], __RequestVerificationToken: token })
 
-            $.post("/admin/deleteCourses", { id: split[2] })
+                        .done(function (res) {
+                            if (res.status) {
+                                $(`.acc_${split[2]}`).remove();
+                                swalWithBootstrapButtons.fire({
+                                    title: "Deleted!",
+                                    text: "Your file has been deleted.",
+                                    icon: "success"
+                                });
+                            }
+                            else {
+                                $(`#sub_message_${split[2]}`).html(res.m);
+                            }
 
+                        })
+
+                        .always(function () {
+                            $(".submitbtn .delbtn").prop("disabled", false);
+
+
+                        });
+
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire({
+                        title: "Cancelled",
+                        text: "Your imaginary file is safe :)",
+                        icon: "error"
+                    });
+                }
+            });
+
+
+
+
+
+        });
+
+        $("#imgCourseConfirm").on("click", function (event) {
+            $(".submitbtn .delbtn #imgCourseConfirm").prop("disabled", true);
+            var img = $("#imgTag").children(img);
+            event.preventDefault();  // previnting from reloading the web page
+
+            var formData = new FormData($("#formData")[0]);
+
+
+            $.ajax({
+                url: "/admin/editCourseImg",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+
+            })
                 .done(function (res) {
-
                     if (res.status) {
-                        window.location.reload();
-                        $(".alert").show();
+                        Swal.fire({
+                            icon: "success",
+                            title: "عملیات موفقیت آمیز بود",
+                            text: res.message,
+                        });
+
+                        $("#imgTag").attr("src", `/AdminAssets/img/ImgCourse/${res.reff}?t=${new Date().getTime()}`);
                     }
                     else {
-                        $(`#sub_message_${split[2]}`).html("در حال برقرار ارتباط با سرور");
+                        Swal.fire({
+                            icon: "error",
+                            title: "خطا در عملیات",
+                            text: res.message,
+                        });
                     }
+                })
+                .fail(function () {
+                    Swal.fire({
+                        icon: "error",
+                        title: "خطا در برقراری ارتباط با سرور",
+                        text: res.message,
+                    });
 
                 })
 
                 .always(function () {
-
-                    $(".submitbtn .delbtn").prop("disabled", false);
+                    $(".submitbtn .delbtn #imgCourseConfirm").prop("disabled", false);
                 });
-
-
-            var close = document.getElementsByClassName("closebtn");
-            var i;
-
-            for (i = 0; i < close.length; i++) {
-                close[i].onclick = function () {
-                    var div = this.parentElement;
-                    div.style.opacity = "0";
-                    setTimeout(function () { div.style.display = "none"; }, 600);
-                }
-            }
-            function myFunction() {
-                document.getElementById("demo").innerHTML = "Hello World";
-            }   
+                
 
         });
 
-        
+
 
     </script>
 }

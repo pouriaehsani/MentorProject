@@ -687,6 +687,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="AdminAssets\img\ImgCourse\" />
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
