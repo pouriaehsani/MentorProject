@@ -232,6 +232,7 @@ h6 {
     border: none;
     border-radius: 5px;
     box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
+    
 }
 
 .card-header,
@@ -736,7 +737,8 @@ h6 {
 
     .sidebar-nav .nav-content {
         padding: 5px 0 0 0;
-        margin: 0;
+        /*margin: 0;*/
+        margin-left: 5px;
         list-style: none;
     }
 
@@ -746,7 +748,7 @@ h6 {
             font-size: 14px;
             font-weight: 600;
             color: #012970;
-            transition: 0.3;
+            transition: 0.3s;
             padding: 10px 0 10px 40px;
             transition: 0.3s;
         }

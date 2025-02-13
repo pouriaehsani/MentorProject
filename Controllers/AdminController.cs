@@ -131,7 +131,6 @@ namespace mentorproject.Controllers
 
         
         [HttpPost]
-        
         public ActionResult editCourseImg(int imgpkID,int coursepkID, string imgTitle, string imgAlt, HttpPostedFileBase imgsrc) {
             string fileName = "";
             if (validation()) {
@@ -173,9 +172,46 @@ namespace mentorproject.Controllers
             return Json(new { status = false, message = "validation failed!!!" }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public ActionResult createCourse() 
+        {
+            return View(); 
+        }
+
+        [HttpPost]
+        public ActionResult createCourse(string newCurseName,string newCourseDis)
+        {
+            try
+            {
+                if (validation())
+                {
+                    Tbl_course newCourse = new Tbl_course();
+                    newCourse.title = newCurseName;
+                    newCourse.description = newCourseDis;
+                    newCourse.fkCat = 1;
+                    newCourse.fkTEACH = 2;
+                    newCourse.status = false;
+                    context.Tbl_course.Add(newCourse);
+                    context.SaveChanges();
+                    ViewBag.message = "دوره با موفقیت ایجاد شد...";
+
+                }
+                else 
+                {
+                    ViewBag.message = "شما دسترسی ندارید...";
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.message = ex.Message; ;
+            }
+            return View();
+        }
+
+
+
         private bool validation()
         {
-
             if (Request.Cookies["lc"].Value == "null") { Response.Redirect("~/admin/login"); }
             if (Request.Cookies["lc"].Value == "") { Response.Redirect("~/Home/login"); }
 

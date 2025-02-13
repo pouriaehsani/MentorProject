@@ -1,4 +1,4 @@
-﻿@{ 
+﻿@{
     if (Request.Cookies["lc"] == null)
     {
         Response.Redirect("~/admin/login");
@@ -6,7 +6,7 @@
 
 }
 
- @Html.AntiForgeryToken()
+@Html.AntiForgeryToken()
 
 
 <!DOCTYPE html>
@@ -50,9 +50,49 @@
     * Author: BootstrapMade.com
     * License: https://bootstrapmade.com/license/
     ======================================================== -->
+
+    <style>
+
+        #preloader {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #3498db;
+            border-top: 5px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @@keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 </head>
 
-<body style="direction:rtl">
+<body style="direction:rtl" onload="hideLoader()">
+
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
+
 
     <!-- ======= Header ======= -->
     <header id="header" class="header fixed-top d-flex align-items-center">
@@ -293,92 +333,26 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="courses">
-                    <i class='bx bx-book-alt'></i>
-                    <span>دوره ها</span>
-                </a>
-            </li>
-
-
-
+            
             <!-- End Dashboard Nav -->
 
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-menu-button-wide"></i><span>Components</span><i class="bi bi-chevron-down ms-auto"></i>
+                    <i class="bx bx-book-alt"></i><span>دوره ها</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
-                        <a href="components-alerts.html">
-                            <i class="bi bi-circle"></i><span>Alerts</span>
+                        <a href="courses">
+                            
+                            <i style="font-size: 1.2em" class="ri-handbag-line"></i><span>ویرایش دوره ها</span>
                         </a>
                     </li>
                     <li>
-                        <a href="components-accordion.html">
-                            <i class="bi bi-circle"></i><span>Accordion</span>
+                        <a href="createCourse">
+                            <i style="font-size: 1.2em" class="ri-window-2-fill"></i><span>ایجاد دوره</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="components-badges.html">
-                            <i class="bi bi-circle"></i><span>Badges</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="components-breadcrumbs.html">
-                            <i class="bi bi-circle"></i><span>Breadcrumbs</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="components-buttons.html">
-                            <i class="bi bi-circle"></i><span>Buttons</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="components-cards.html">
-                            <i class="bi bi-circle"></i><span>Cards</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="components-carousel.html">
-                            <i class="bi bi-circle"></i><span>Carousel</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="components-list-group.html">
-                            <i class="bi bi-circle"></i><span>List group</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="components-modal.html">
-                            <i class="bi bi-circle"></i><span>Modal</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="components-tabs.html">
-                            <i class="bi bi-circle"></i><span>Tabs</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="components-pagination.html">
-                            <i class="bi bi-circle"></i><span>Pagination</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="components-progress.html">
-                            <i class="bi bi-circle"></i><span>Progress</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="components-spinners.html">
-                            <i class="bi bi-circle"></i><span>Spinners</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="components-tooltips.html">
-                            <i class="bi bi-circle"></i><span>Tooltips</span>
-                        </a>
-                    </li>
+                    
                 </ul>
             </li><!-- End Components Nav -->
 
@@ -567,6 +541,13 @@
 
     <script>
         var token = $('input[name="__RequestVerificationToken"]').val();
+
+        function showLoader() {
+            $("#preloader").fadeIn(); // اطمینان از flexbox هنگام نمایش
+        }
+        function hideLoader() {
+            $("#preloader").css("display", "none");
+        }
     </script>
 
     @RenderSection("BeforeScripts", required: false)

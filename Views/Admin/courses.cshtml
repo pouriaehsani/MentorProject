@@ -210,8 +210,7 @@
 
 
         $(".submitbtn").click(function () {    //when button clicks
-            $(".submitbtn .delbtn").prop("disabled", true);   //disabling button during process
-
+            showLoader();
 
             var thisID = $(this).attr("id");
             var split = thisID.split("_");
@@ -229,15 +228,19 @@
 
 
             $('.submit_note').css('color', 'blue');  //colors for signs in submits
-
             $(`#sub_message_${split[2]}`).html("در حال برقرار ارتباط با سرور");
+
             $.post("/admin/editCourses", { ct: ct, cdis: cdis, cm: cm[1], cc: cc[1], cs: cs, cID: split[2]})     //posting dada to adminControler for process
 
                 .done(function (res) {          //the operations after returning result
                     if (res.status) {
-                        $('.submit_note').css('color', 'green');
 
-                        $(`#sub_message_${split[2]}`).html("تغییرات ثبت شد...");
+                        $(`#sub_message_${split[2]}`).css("display", "none");
+                        Swal.fire({
+                            icon: "success",
+                            title: "تغییرات ثبت شد!!!",
+                            text: res.message,
+                        });
 
                     }
                     else {
@@ -255,8 +258,7 @@
 
 
                 .always(function () {
-                    $(".submitbtn .delbtn").prop("disabled", false);
-
+                    hideLoader();
 
                 });
 
@@ -283,7 +285,7 @@
             })
             .then((result) => {
                 if (result.isConfirmed) {
-                    $(".submitbtn .delbtn").prop("disabled", true);
+                    showLoader();
 
                     var thisID = $(this).attr("id");
                     var split = thisID.split("_")
@@ -306,13 +308,12 @@
                         })
 
                         .always(function () {
-                            $(".submitbtn .delbtn").prop("disabled", false);
+                            hideLoader();
 
 
                         });
 
                 } else if (
-                    /* Read more about handling dismissals below */
                     result.dismiss === Swal.DismissReason.cancel
                 ) {
                     swalWithBootstrapButtons.fire({
@@ -330,7 +331,7 @@
         });
 
         $("#imgCourseConfirm").on("click", function (event) {
-            $(".submitbtn .delbtn #imgCourseConfirm").prop("disabled", true);
+            showLoader();
             var img = $("#imgTag").children(img);
             event.preventDefault();  // previnting from reloading the web page
 
@@ -373,12 +374,12 @@
                 })
 
                 .always(function () {
-                    $(".submitbtn .delbtn #imgCourseConfirm").prop("disabled", false);
+                    hideLoader();
                 });
                 
-
+           
         });
-
+        
 
 
     </script>
