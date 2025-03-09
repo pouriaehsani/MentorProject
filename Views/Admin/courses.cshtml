@@ -1,5 +1,6 @@
 ﻿
 @{
+
     ViewBag.Title = "courses";
     Layout = "~/Views/shared/_adminLayout.cshtml";
 
@@ -7,13 +8,14 @@
 }
 
 <h2>دوره ها</h2>
+<button id="createCourseButton" style="margin:20px" class="btn btn-success">ایجاد دوره</button>
 
 <div class="row" style="display: flex; flex-direction: column; align-items: flex-end; margin: 5px;">
     <section class="section">
         <div class="col-lg-10">
             <div class="row">
                 <div class="card-body">
-                    <h5 class="card-title">دوره ها</h5>
+
 
                     <!-- Default Accordion -->
                     @foreach (var item in ViewBag.courses)
@@ -121,14 +123,14 @@
 
                                                                     <button id="btn_submit_@item.pkID" type="button" class="btn btn-primary submitbtn">تایید اطلاعات</button>
                                                                     <button id="btn_delete_@item.pkID" type="button" class="btn btn-danger delbtn" style="margin-right:15px">حذف دوره</button>
-                                                                    
+
 
                                                                     <div class=" submit_note" style=" font-size: 14px; font-weight: bold; display: flex; align-items: center; justify-content: center;">
 
-                                                                        <p  style=" margin-top: 12px; margin-left: 10px;" id="sub_message_@item.pkID"></p>
+                                                                        <p style=" margin-top: 12px; margin-left: 10px;" id="sub_message_@item.pkID"></p>
 
                                                                     </div>
-                                                                    
+
 
 
 
@@ -141,7 +143,7 @@
                                                     <div class="tab-pane fade" id="tab2_@item.pkID" role="tabpanel" aria-labelledby="profile-tab">
                                                         <div class="row">
                                                             <div class="image-container col-sm-6">
-                                                                <img id="imgTag" class="ImSticky" src="~/AdminAssets/img/ImgCourse/@item.address" width="400" alt="@item.alt" title="@item.imgTitle" />
+                                                                <img id="imgTag_@item.pkID" class="ImSticky imgCourseTag" src="~/AdminAssets/img/ImgCourse/@item.address" width="400" alt="@item.alt" title="@item.imgTitle" />
                                                             </div>
 
 
@@ -149,7 +151,7 @@
                                                                 <div style="display:none" class="row mb-3">
                                                                     <label for="inputText" class="col-sm-12 col-form-label">شناسه عکس</label>
                                                                     <div class="col-sm-12">
-                                                                        <input type="text" name="imgpkID" class="form-control" value="@item.pkID">
+                                                                        <input type="text" name="imgpkID" class="form-control" value="@item.fkImg">
                                                                     </div>
                                                                 </div>
                                                                 <div style="display:none" class="row mb-3">
@@ -177,7 +179,7 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <button id="imgCourseConfirm" type="submit" class="btn btn-primary ">تایید اطلاعات</button>
+                                                                <button id="imgCourseConfirm_@item.pkID" type="button" class="btn btn-primary subbtn">تایید اطلاعات</button>
                                                             </form>
 
 
@@ -198,10 +200,10 @@
 
                 </div>
             </div>
-            
+
         </div>
     </section>
-    
+
 </div>
 
 @section BeforeScripts {
@@ -214,6 +216,7 @@
 
             var thisID = $(this).attr("id");
             var split = thisID.split("_");
+
 
 
             var ct = $(`#ct_${split[2]}`).val();
@@ -230,7 +233,7 @@
             $('.submit_note').css('color', 'blue');  //colors for signs in submits
             $(`#sub_message_${split[2]}`).html("در حال برقرار ارتباط با سرور");
 
-            $.post("/admin/editCourses", { ct: ct, cdis: cdis, cm: cm[1], cc: cc[1], cs: cs, cID: split[2]})     //posting dada to adminControler for process
+            $.post("/admin/editCourses", { ct: ct, cdis: cdis, cm: cm[1], cc: cc[1], cs: cs, cID: split[2] })     //posting dada to adminControler for process
 
                 .done(function (res) {          //the operations after returning result
                     if (res.status) {
@@ -283,46 +286,46 @@
                 cancelButtonText: "No, cancel!",
                 reverseButtons: true
             })
-            .then((result) => {
-                if (result.isConfirmed) {
-                    showLoader();
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        showLoader();
 
-                    var thisID = $(this).attr("id");
-                    var split = thisID.split("_")
-                    $(`#sub_message_${split[2]}`).html("در حال برقرار ارتباط با سرور");
-                    $.post("/admin/deleteCourses", { id: split[2], __RequestVerificationToken: token })
+                        var thisID = $(this).attr("id");
+                        var split = thisID.split("_")
+                        $(`#sub_message_${split[2]}`).html("در حال برقرار ارتباط با سرور");
+                        $.post("/admin/deleteCourses", { id: split[2], __RequestVerificationToken: token })
 
-                        .done(function (res) {
-                            if (res.status) {
-                                $(`.acc_${split[2]}`).remove();
-                                swalWithBootstrapButtons.fire({
-                                    title: "Deleted!",
-                                    text: "Your file has been deleted.",
-                                    icon: "success"
-                                });
-                            }
-                            else {
-                                $(`#sub_message_${split[2]}`).html(res.m);
-                            }
+                            .done(function (res) {
+                                if (res.status) {
+                                    $(`.acc_${split[2]}`).remove();
+                                    swalWithBootstrapButtons.fire({
+                                        title: "Deleted!",
+                                        text: "Your file has been deleted.",
+                                        icon: "success"
+                                    });
+                                }
+                                else {
+                                    $(`#sub_message_${split[2]}`).html(res.m);
+                                }
 
-                        })
+                            })
 
-                        .always(function () {
-                            hideLoader();
+                            .always(function () {
+                                hideLoader();
 
 
+                            });
+
+                    } else if (
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons.fire({
+                            title: "Cancelled",
+                            text: "Your imaginary file is safe :)",
+                            icon: "error"
                         });
-
-                } else if (
-                    result.dismiss === Swal.DismissReason.cancel
-                ) {
-                    swalWithBootstrapButtons.fire({
-                        title: "Cancelled",
-                        text: "Your imaginary file is safe :)",
-                        icon: "error"
-                    });
-                }
-            });
+                    }
+                });
 
 
 
@@ -330,10 +333,16 @@
 
         });
 
-        $("#imgCourseConfirm").on("click", function (event) {
+        $(".subbtn").click(function (event) {
             showLoader();
-            var img = $("#imgTag").children(img);
             event.preventDefault();  // previnting from reloading the web page
+            var imgTag = $(this).attr("id");
+            var tagSplit = imgTag.split("_");
+            tagSplit = tagSplit[1];
+            var img = $(`#imgTag_${tagSplit}`);
+
+
+
 
             var formData = new FormData($("#formData")[0]);
 
@@ -354,7 +363,7 @@
                             text: res.message,
                         });
 
-                        $("#imgTag").attr("src", `/AdminAssets/img/ImgCourse/${res.reff}?t=${new Date().getTime()}`);
+                        $(img).attr("src", `/AdminAssets/img/ImgCourse/${res.reff}?t=${new Date().getTime()}`);
                     }
                     else {
                         Swal.fire({
@@ -376,10 +385,43 @@
                 .always(function () {
                     hideLoader();
                 });
-                
-           
+
+
         });
-        
+
+
+        $("#createCourseButton").click(function () {
+            showLoader();
+            $.post("/admin/createCourses2", { __RequestVerificationToken: token })
+
+                .done(function (res) {
+                    if (res.status) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "عملیات موفقیت آمیز بود",
+                            text: res.message,
+                            showConfirmButton: false,
+                        });
+                        setTimeout(reloadPage, 2000);
+
+                        function reloadPage() {
+                            window.location.reload();
+                        }
+                    }
+                    else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "خطا در عملیات",
+                            text: res.message,
+                        });
+                    }
+                })
+                .always(function () {
+                    hideLoader();
+                })
+
+        });
+
 
 
     </script>

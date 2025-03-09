@@ -9,7 +9,7 @@ namespace mentorproject.Controllers
 {
     public class HomeController : Controller
     {
-        school1 context = new school1();
+        educationDb context = new educationDb();
 
         // GET: Home
         public ActionResult Index()

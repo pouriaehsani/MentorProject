@@ -3,33 +3,62 @@
     Layout = "~/Views/shared/_adminLayout.cshtml";
 }
 
-<h2>createCourse</h2>
+<h2 style="margin-bottom:20px">ایجاد دوره جدید</h2>
 <div class="row">
     <div class="col-lg-9">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Vertical Form</h5>
 
                 <!-- Vertical Form -->
-                <form class="row g-3" method="post" action="@Url.Action("createCourse","admin")">
+                <form id="createCourse" style="margin-top:10px" class="row g-3" method="post" action="@Url.Action("createCourse","admin")">
                     <div class="col-12">
                         <label for="inputNanme4" class="form-label">عنوان دوره</label>
-                        <input type="text" class="form-control"  name="newCurseName">
+                        <input type="text" class="form-control" name="newCurseName" required>
                     </div>
                     <div class="col-12">
                         <label for="inputEmail4" class="form-label">توضیحات دوره</label>
-                        <input type="text" class="form-control"  name="newCourseDis">
+                        <input type="text" class="form-control" name="newCourseDis">
                     </div>
                     <div class="text-center">
-                        <button type="submit" class="btn btn-primary">ایجاد</button>
+                        <button id="createCourseButton" type="submit" class="btn btn-primary" data-status="@ViewBag.status" data-message="@ViewBag.message">
+                            ایجاد
+                        </button>
                     </div>
                 </form><!-- Vertical Form -->
 
             </div>
         </div>
     </div>
-    
+
 </div>
 <p>@ViewBag.message</p>
+
+
+@*@section BeforeScripts {
+    <script>
+        $("#createCourseButton").click(function (event) {
+            event.preventDefault();
+            var status = Number($(this).data("status"));  // Convert to number if needed
+            var message = $(this).data("message");
+            if (status == 1) {
+                console.log("hjewsjkhfd")
+                Swal.fire({
+                    icon: "success",
+                    title: "عملیات موفقیت آمیز بود",
+                    text: message,
+                });
+            }
+            else if (status == 2) {
+                Swal.fire({
+                    icon: "error",
+                    title: "خطا در عملیات",
+                    text: message,
+                });
+            }
+        });
+
+
+    </script>
+}*@
 
 

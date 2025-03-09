@@ -1,0 +1,126 @@
+﻿
+@{
+    ViewBag.Title = "createTeachers";
+    Layout = "~/Views/shared/_adminLayout.cshtml";
+}
+
+<h2>تغییرات اساتید</h2>
+
+<div class="row">
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-body">
+                    
+                
+                    <form id="editTeacher" style="margin-top:10px" class="row g-3">
+                        <div class="avatar-container">
+                            <img class="avatar" src="~/AdminAssets/img/ImgTeacher/@ViewBag.teacherData.address" />
+                        </div>
+                        <div class="col-12" style="display:none" disabled>
+                            <label for="teacherID" class="form-label">شماره استاد</label>
+                            <input type="text" class="form-control" name="teacherID" value="@ViewBag.teacherData.pkID">
+                        </div>
+                        <div class="col-12">
+                            <label for="firstname" class="form-label">نام</label>
+                            <input type="text" class="form-control" name="firstname" value="@ViewBag.teacherData.firstname">
+                        </div>
+
+                        <div class="col-12">
+                            <label for="lastname" class="form-label">نام خانوادگی</label>
+                            <input type="text" class="form-control" name="lastname" value="@ViewBag.teacherData.lastname">
+                        </div>
+
+                        <div class="col-12">
+                            <label for="teacherImgFile" class="form-label">انتخاب عکس</label>
+                            <input type="file" class="form-control" name="teacherImgFile">
+                        </div>
+                        <div class="col-12">
+                            <label for="teacherImgTitle" class="form-label">عنوان عکس</label>
+                            <input type="text" class="form-control" name="imgTeacherTitle" value="@ViewBag.teacherData.title">
+                        </div>
+                        <div class="col-12">
+                            <label for="teacherImgAlt" class="form-label">تگ</label>
+                            <input type="text" class="form-control" name="teacherImgAlt" value="@ViewBag.teacherData.alt">
+                        </div>
+
+                        <div class=" col-sm-5 text-center" style="display: flex; margin-left: 5px;">
+                            <div class="text-center">
+                                <button id="saveTeacherBtn" type="submit" class="btn btn-success">
+                                    ذخیره
+                                </button>
+                            </div>
+                            <div class="text-center">
+                                <a id="backBtn" href="/Admin/teachers" class="btn btn-danger" style="margin-right: 5px;">
+                                    بازگشت
+                                </a>
+                            </div>
+                        </div>
+
+                    </form>
+                 
+                <!-- Vertical Form -->
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section BeforeScripts {
+    <script>
+        $(document).ready(function () {
+            $("form").submit(function (event) {
+                showLoader();
+                event.preventDefault();
+                img = $(this).find("div").children("img");
+
+                var formData = new FormData($(this)[0]);
+                console.log(img);
+
+                $.ajax({
+                    url: "/admin/createTeachers",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+
+                })
+                    .done(function (res) {
+                        if (res.status) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "عملیات موفقیت آمیز بود",
+                                text: res.message,
+                            });
+
+                            $(img).attr("src", `/AdminAssets/img/ImgTeacher/${res.reff}?t=${new Date().getTime()}`);
+                        }
+                        else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "خطا در عملیات",
+                                text: res.message,
+                            });
+                        }
+                    })
+                    .fail(function () {
+                        Swal.fire({
+                            icon: "error",
+                            title: "خطا در برقراری ارتباط با سرور",
+                            text: res.message,
+                        });
+
+                    })
+
+                    .always(function () {
+                        hideLoader();
+                    });
+
+            });
+            
+
+        });
+
+
+    </script>
+
+}

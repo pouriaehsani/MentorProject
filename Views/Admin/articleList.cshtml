@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewBag.Title = "articleList";
+    Layout = "~/Views/shared/_adminLayout.cshtml";
+}
+
+@using mentorproject.Models
+@model List<articleListModel>
+<div class="row">
+    <div class="col-lg-9">
+        <div class="card">
+            <div class="card-body">
+                <div>
+                    <a class="btn btn-primary text-center" href="/Admin/article/0" style=" margin-top: 10px">
+                        ایجاد مقاله جدید
+                    </a>
+                </div>
+                
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+
+                            
+                            <th scope="col">عنوان</th>
+                            <th scope="col">عملیات</th>
+
+                        </tr>
+                    </thead>
+
+                    @foreach (articleListModel item in Model)
+                    {
+
+                        <tr>
+
+                            
+                            <td>@item.Title</td>
+                            <td>
+                                <a class="btn btn-primary" href="/admin/article/@item.pkID">تغییرات</a>
+                                <button  type="submit" class="btn btn-danger delbtn">حذف مقاله</button>
+                            </td>
+                        </tr>
+
+                    }
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+

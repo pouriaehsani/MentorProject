@@ -1,0 +1,197 @@
+﻿
+@{
+    ViewBag.Title = "teachers";
+    Layout = "~/Views/shared/_adminLayout.cshtml";
+}
+
+<div class="modal fade" id="modalDialogScrollable" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">اطلاعات استاد جدید را وارد کنید</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="TeacherData" style="margin-top:10px" class="row g-3">
+                    <div class="avatar-container">
+                        <img class="avatar" src="~/AdminAssets/img/ImgTeacher/defultImg.jpg" />
+                    </div>
+                    <div class="col-12" style="display:none" disabled>
+                        <label for="teacherID" class="form-label">شماره استاد</label>
+                        <input type="text" class="form-control" name="teacherID" value="">
+                    </div>
+                    <div class="col-12">
+                        <label for="firstname" class="form-label">نام</label>
+                        <input type="text" class="form-control" name="firstname" value="">
+                    </div>
+
+                    <div class="col-12">
+                        <label for="lastname" class="form-label">نام خانوادگی</label>
+                        <input type="text" class="form-control" name="lastname" value="">
+                    </div>
+
+                    <div class="col-12">
+                        <label for="teacherImgFile" class="form-label">انتخاب عکس</label>
+                        <input type="file" class="form-control" name="teacherImgFile">
+                    </div>
+                    <div class="col-12">
+                        <label for="teacherImgTitle" class="form-label">عنوان عکس</label>
+                        <input type="text" class="form-control" name="imgTeacherTitle" value="">
+                    </div>
+                    <div class="col-12">
+                        <label for="teacherImgAlt" class="form-label">تگ</label>
+                        <input type="text" class="form-control" name="teacherImgAlt" value="">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                <button id="createTeacher" type="button" class="btn btn-primary">ایجاد</button>
+            </div>
+        </div>
+    </div>
+</div><!-- End Modal Dialog Scrollable-->
+
+
+<h2>اساتید</h2>
+
+<div class="row">
+    <div class="col-lg-9">
+        <div class="card">
+            <div class="card-body">
+
+                <button type="button" class="btn btn-primary text-center" data-bs-toggle="modal" data-bs-target="#modalDialogScrollable" style="display: flex; margin-top: 10px">
+                    ایجاد استاد جدید
+                </button>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            
+                            <th scope="col">نام</th>
+                            <th scope="col">نام خانوادگی</th>
+                            <th scope="col">عملیات</th>
+
+                        </tr>
+                    </thead>
+
+                    @foreach (var item in ViewBag.teachers)
+                    {
+
+                        <tr>
+                            
+                            <td>@item.firstname</td>
+                            <td>@item.lastname</td>
+                            <td>
+                                <a class="btn btn-primary" href="createTeachers/@item.pkID">تغییرات</a>
+                                <button id="deleteTeacher_@item.pkID" type="submit" class="btn btn-danger delbtn" >حذف استاد</button>
+                            </td>
+                        </tr>
+
+                    }
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section BeforeScripts{
+    <script>
+
+        $(document).ready(function () {
+            $("#createTeacher").click(function () {
+                showLoader();
+                img = $("#TeacherData").find("div").children("img");
+
+                var formData = new FormData($("#TeacherData")[0]);
+                
+
+                $.ajax({
+                    url: "/admin/createNewTeacher",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+
+                })
+                    .done(function (res) {
+                        if (res.status) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "عملیات موفقیت آمیز بود",
+                                text: res.message,
+                            });
+
+                            $(img).attr("src", `/AdminAssets/img/ImgTeacher/${res.reff}?t=${new Date().getTime()}`);
+                            window.location.reload();
+                        }
+                        else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "خطا در عملیات",
+                                text: res.message,
+                            });
+                        }
+                    })
+                    .fail(function () {
+                        Swal.fire({
+                            icon: "error",
+                            title: "خطا در برقراری ارتباط با سرور",
+                            text: res.message,
+                        });
+
+                    })
+
+                    .always(function () {
+                        hideLoader();
+                    });
+
+            });
+
+            $(".delbtn").click(function () {
+                showLoader();
+                var teacherID = $(this).attr("id");
+                var split = teacherID.split("_");
+
+                $.post("/admin/deleteTeacher", { id: split[1] })
+
+                .done(function (res) {
+                    if (res.status) {
+                        swal.fire({
+                            title: "Deleted!",
+                            text: res.m,
+                            icon: "success"
+                        });
+                        setTimeout(reloadPage, 2000);
+
+                        function reloadPage() {
+                            window.location.reload();
+                        }
+                    }
+                    else {
+                        swal.fire({
+                            title: "Not Deleted!",
+                            text: res.m,
+                            icon: "error"
+                        });
+                    }
+
+                })
+
+                .always(function () {
+                    hideLoader();
+
+
+                });
+            });
+
+        });
+
+        
+
+
+
+    </script>
+}
+
