@@ -1318,3 +1318,18 @@ input.error, textarea.error {
         color: black;
     }
 
+.avatar-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* Ensures full-width for centering */
+    margin-bottom: 10px; /* Adjust spacing */
+}
+
+.avatar {
+    width: 90px; /* Adjust size */
+    height: 90px;
+    border-radius: 35%;
+    background-size: cover;
+    background-position: center;
+}

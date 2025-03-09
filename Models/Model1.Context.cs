@@ -13,10 +13,10 @@ namespace mentorproject.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class school1 : DbContext
+    public partial class educationDb : DbContext
     {
-        public school1()
-            : base("name=school1")
+        public educationDb()
+            : base("name=educationDb")
         {
         }
     
@@ -28,10 +28,12 @@ namespace mentorproject.Models
         public virtual DbSet<Table_category> Table_category { get; set; }
         public virtual DbSet<Table_events> Table_events { get; set; }
         public virtual DbSet<table_student> table_student { get; set; }
-        public virtual DbSet<Table_teacher> Table_teacher { get; set; }
         public virtual DbSet<tbl_admins> tbl_admins { get; set; }
-        public virtual DbSet<Tbl_img> Tbl_img { get; set; }
-        public virtual DbSet<Tbl_course> Tbl_course { get; set; }
         public virtual DbSet<View_courses> View_courses { get; set; }
+        public virtual DbSet<View_trainers> View_trainers { get; set; }
+        public virtual DbSet<Table_teacher> Table_teacher { get; set; }
+        public virtual DbSet<Tbl_course> Tbl_course { get; set; }
+        public virtual DbSet<Tbl_img> Tbl_img { get; set; }
+        public virtual DbSet<Tbl_article> Tbl_article { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿@{
+﻿<!DOCTYPE html>
+@{
     if (Request.Cookies["lc"] == null)
     {
         Response.Redirect("~/admin/login");
@@ -8,8 +9,6 @@
 
 @Html.AntiForgeryToken()
 
-
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -333,7 +332,7 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-            
+
             <!-- End Dashboard Nav -->
 
             <li class="nav-item">
@@ -343,7 +342,7 @@
                 <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
                         <a href="courses">
-                            
+
                             <i style="font-size: 1.2em" class="ri-handbag-line"></i><span>ویرایش دوره ها</span>
                         </a>
                     </li>
@@ -352,9 +351,23 @@
                             <i style="font-size: 1.2em" class="ri-window-2-fill"></i><span>ایجاد دوره</span>
                         </a>
                     </li>
-                    
+
                 </ul>
             </li><!-- End Components Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="~/Admin/teachers">
+                    <i class="bi bi-person"></i>
+                    <span>اساتید</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="~/Admin/articleList">
+                    <i class="bi bi-journal-text"></i>
+                    <span>مقاله ها</span>
+                </a>
+            </li>
 
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">

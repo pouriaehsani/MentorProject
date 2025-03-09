@@ -18,13 +18,18 @@ namespace mentorproject.Models
         public Table_teacher()
         {
             this.Tbl_course = new HashSet<Tbl_course>();
+            this.Tbl_article = new HashSet<Tbl_article>();
         }
     
         public int pkID { get; set; }
         public string firstname { get; set; }
         public string lastname { get; set; }
+        public int fkImg { get; set; }
     
+        public virtual Tbl_img Tbl_img { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Tbl_course> Tbl_course { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Tbl_article> Tbl_article { get; set; }
     }
 }

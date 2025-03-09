@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="620c2f30aed74cc59b17d511651e5340" Name="Diagram1" ZoomLevel="64">
+        <EntityTypeShape EntityType="educationDatabase.Table_category" Width="1.5" PointX="13.375" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="educationDatabase.Table_events" Width="1.5" PointX="16.875" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="educationDatabase.table_student" Width="1.5" PointX="11.625" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="educationDatabase.tbl_admins" Width="1.5" PointX="15.125" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="educationDatabase.View_courses" Width="1.5" PointX="1" PointY="4.25" />
+        <EntityTypeShape EntityType="educationDatabase.View_trainers" Width="1.5" PointX="6.375" PointY="5.375" />
+        <EntityTypeShape EntityType="educationDatabase.Table_teacher" Width="1.5" PointX="8" PointY="5.375" />
+        <EntityTypeShape EntityType="educationDatabase.Tbl_course" Width="1.5" PointX="4.625" PointY="4.875" />
+        <EntityTypeShape EntityType="educationDatabase.Tbl_img" Width="1.5" PointX="9.75" PointY="5.625" />
+        <AssociationConnector Association="educationDatabase.FK_Tbl_course_Tbl_category" />
+        <AssociationConnector Association="educationDatabase.FK_Table_teacher_Tbl_img" />
+        <AssociationConnector Association="educationDatabase.FK_Tbl_course_Table_teacher" />
+        <AssociationConnector Association="educationDatabase.FK_Tbl_course_Tbl_img" />
+        <EntityTypeShape EntityType="educationDatabase.Tbl_article" Width="1.5" PointX="2.75" PointY="4.625" />
+        <AssociationConnector Association="educationDatabase.FK_Tbl_article_Table_teacher" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

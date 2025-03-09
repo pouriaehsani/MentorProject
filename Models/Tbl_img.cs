@@ -17,6 +17,7 @@ namespace mentorproject.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Tbl_img()
         {
+            this.Table_teacher = new HashSet<Table_teacher>();
             this.Tbl_course = new HashSet<Tbl_course>();
         }
     
@@ -25,6 +26,8 @@ namespace mentorproject.Models
         public string title { get; set; }
         public string alt { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Table_teacher> Table_teacher { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Tbl_course> Tbl_course { get; set; }
     }
