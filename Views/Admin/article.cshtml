@@ -14,7 +14,7 @@
         <form class="row g-3" method="post" style="margin-top:10px" enctype="multipart/form-data" action="@Url.Action("article","admin")">
             <div class="col-md-12">
                 <div class="form-floating">
-                    <input type="text" class="form-control" id="floatingName" placeholder="عنوان" name="Title" value="@Model.pkID">
+                    <input type="text" class="form-control" id="floatingName"  name="pkID" value="@Model.pkID">
                     <label for="floatingName">شمارنده</label>
                 </div>
             </div>
@@ -67,7 +67,7 @@
                 <div class="col-md-12">
                     <div class="col-md-12 mb-3">
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="floatingCity" placeholder="عنوان عکس" name="ImgTitle" value="@Model.ImgAlt">
+                            <input type="text" class="form-control" id="floatingCity" placeholder="عنوان عکس" name="ImgTitle" value="@Model.ImgTitle">
                             <label for="floatingCity">عنوان عکس</label>
                         </div>
                     </div>
@@ -82,7 +82,7 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <img src="~/AdminAssets/img/ImgTeacher/defultImg.jpg" />
+                <img src="~/AdminAssets/img/ImgArticle/@Model.ImgUrl" style="height:300px"/>
             </div>
 
             <!-- TinyMCE Editor -->
@@ -93,7 +93,7 @@
 
             <div class="text-center">
                 <button type="submit" class="btn btn-primary createArticle">ایجاد</button>
-                <button type="reset" class="btn btn-danger">بازگشت</button>
+                <a href="/Admin/articleList" class="btn btn-danger">بازگشت</a>
             </div>
         </form><!-- End floating Labels Form -->
 

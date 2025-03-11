@@ -447,6 +447,93 @@ namespace mentorproject.Controllers
         [ValidateInput(false)]
         public ActionResult article(articleMedel p)
         {
+            string fileName = "";
+            string stringDate = DateTime.Now.ToString();
+            stringDate = stringDate.Replace("/", "_");
+            stringDate = stringDate.Replace(":", "_");
+            stringDate = stringDate.Replace(" ", "_");
+
+            if (p.pkID != 0)      //it means that the article exists and we want to change it...
+            {
+                var existedArticle = context.Tbl_article.Where(x => x.pkID == p.pkID).Single();
+                existedArticle.Title = p.Title;
+                existedArticle.Description = p.Description;
+                existedArticle.Keywords = p.Keywords;
+                existedArticle.fkAuthor = p.Author;
+                existedArticle.ImageTitle = p.ImgTitle;
+                existedArticle.ImageAlt = p.ImgAlt;
+                existedArticle.Contents = p.Content;
+                existedArticle.DateModified = DateTime.Now.ToString();
+
+                if (p.ImageArticle == null)
+                {
+                    p.ImgUrl = existedArticle.ImageSrc;
+                }
+                else
+                {
+                    
+                    if (p.ImageArticle.ContentLength > 10000 && p.ImageArticle.ContentLength < 10000000)
+                    {
+                        var prefixName = p.ImageArticle.FileName.Split('.');
+                        fileName = Path.GetFileName("ci_" + stringDate + "." + prefixName[1]);
+                        var path = Path.Combine(Server.MapPath("~/AdminAssets/img/ImgArticle"), fileName);
+                        p.ImageArticle.SaveAs(path);
+
+                        existedArticle.ImageSrc = fileName;
+                        p.ImgUrl = existedArticle.ImageSrc;
+
+                    }
+                    else
+                    {
+                        p.message = "فایل آپلود شده میبایست بین 10 کیلوبایت تا 10 مگابایت باشد...";
+                        p.status = false;
+                    }
+                }
+                p.status = true;
+            }
+            else
+            {
+                Tbl_article editp = new Tbl_article();
+
+                editp.Title = p.Title;
+                editp.Description = p.Description;
+                editp.Keywords = p.Keywords;
+                editp.fkAuthor=p.Author;
+                editp.Contents=p.Content;
+                editp.ImageAlt=p.ImgAlt;
+                editp.ImageTitle=p.ImgTitle;
+                editp.DateModified = DateTime.Now.ToString();
+
+                if (p.ImageArticle != null)
+                {
+                    if (p.ImageArticle.ContentLength > 10000 && p.ImageArticle.ContentLength < 10000000)
+                    {
+                        var prefixName = p.ImageArticle.FileName.Split('.');
+                        fileName = Path.GetFileName("ci_" + stringDate + "." + prefixName[1]);
+                        var path = Path.Combine(Server.MapPath("~/AdminAssets/img/ImgArticle"), fileName);
+                        p.ImageArticle.SaveAs(path);
+                        editp.ImageSrc = fileName;
+                        p.ImgUrl = editp.ImageSrc;
+
+                        context.Tbl_article.Add(editp);
+                        p.message = "مقاله با موفقیت ایجاد شد";
+                        p.status=true;
+                    }
+                    else
+                    {
+                        p.message = "فایل آپلود شده میبایست بین 10 کیلوبایت تا 10 مگابایت باشد...";
+                        p.status = false;
+                    }
+                }
+                else
+                {
+                    p.message = "عکس انتخاب نشده است...";
+                    p.status = false;
+                }                
+            }
+
+            context.SaveChanges();
+            p.Authors = context.Table_teacher.ToList();
             return View(p);
 
         }
