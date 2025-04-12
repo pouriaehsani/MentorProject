@@ -1,0 +1,14 @@
+﻿@using mentorproject.Models
+@model Tbl_Banners
+
+
+
+<img id="Banners-@Model.pkID-Image" src="~/assets/img/Banners/@Model.Image" alt="@Model.ImgAlt" title="@Model.Imgitle" data-aos="fade-in" class="editable" name="عکس  صفحه">
+
+<div class="container">
+    <h2 id="Banners-@Model.pkID-Title" data-aos="fade-up" data-aos-delay="100" class="editable" name="عنوان بنر">@Model.Title</h2>
+    <p id="Banners-@Model.pkID-Description" data-aos="fade-up" data-aos-delay="200" class="editable" name="توضیحات بنر">@Model.Description</p>
+    <div class="d-flex mt-4" data-aos="fade-up" data-aos-delay="300">
+        <a id="Banners-@Model.pkID-ButtonName" href="@Model.Url" class="btn-get-started editable" name="عنوان دکمه">@Model.ButtonName</a>
+    </div>
+</div>

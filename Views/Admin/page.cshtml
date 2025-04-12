@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewBag.Title = "page";
+    Layout = "~/Views/shared/_adminLayout.cshtml";
+}
+@using mentorproject.Models
+@model pageListData
+<div class="card">
+    <div class="card-body">
+        <!-- Floating Labels Form -->
+        <form class="row g-3" method="post" style="margin-top:10px" action="@Url.Action("page","admin")">
+            <div class="col-md-12">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="floatingName" name="pkID" value="@Model.pkID">
+                    <label for="floatingName">شمارنده</label>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="floatingName" placeholder="عنوان" name="Title" value="@Model.Title">
+                    <label for="floatingName">عنوان</label>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-floating">
+                    <textarea class="form-control" placeholder="توضیحات" id="floatingTextarea" style="height: 150px;" name="Description">@Model.Description</textarea>
+                    <label for="floatingTextarea">توضیحات</label>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="floatingName" placeholder="کلمات کلیدی" name="Keywords" value="@Model.Keywords">
+                    <label for="floatingName">کلمات کلیدی</label>
+                </div>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">ایجاد</button>
+                <a href="/Admin/pageList" class="btn btn-danger">بازگشت</a>
+            </div>
+        </form><!-- End floating Labels Form -->
+
+    </div>
+</div>
+

@@ -13,7 +13,7 @@
         <!-- Floating Labels Form -->
         <form class="row g-3" method="post" style="margin-top:10px" enctype="multipart/form-data" action="@Url.Action("article","admin")">
             <div class="col-md-12">
-                <div class="form-floating">
+                <div class="form-floating" style="display:none">
                     <input type="text" class="form-control" id="floatingName"  name="pkID" value="@Model.pkID">
                     <label for="floatingName">شمارنده</label>
                 </div>

@@ -20,6 +20,18 @@
           <Property Name="title" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="discription" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="Table_pages">
+          <Key>
+            <PropertyRef Name="pkID" />
+          </Key>
+          <Property Name="pkID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="100" />
+          <Property Name="Keywords" Type="nvarchar" MaxLength="100" />
+          <Property Name="Action" Type="nvarchar" MaxLength="50" />
+          <Property Name="fkLangID" Type="int" />
+          <Property Name="Defaults" Type="bit" />
+        </EntityType>
         <EntityType Name="table_student">
           <Key>
             <PropertyRef Name="pkID" />
@@ -63,6 +75,19 @@
           <Property Name="ImageSrc" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="DateModified" Type="nchar" MaxLength="20" Nullable="false" />
         </EntityType>
+        <EntityType Name="Tbl_Banners">
+          <Key>
+            <PropertyRef Name="pkID" />
+          </Key>
+          <Property Name="pkID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="100" />
+          <Property Name="Description" Type="nvarchar" MaxLength="100" />
+          <Property Name="Image" Type="nvarchar" MaxLength="50" />
+          <Property Name="Url" Type="nvarchar" MaxLength="50" />
+          <Property Name="ButtonName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ImgAlt" Type="nvarchar" MaxLength="50" />
+          <Property Name="Imgitle" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="Tbl_course">
           <Key>
             <PropertyRef Name="pkID" />
@@ -83,6 +108,58 @@
           <Property Name="address" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="title" Type="nvarchar" MaxLength="100" />
           <Property Name="alt" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Tbl_language">
+          <Key>
+            <PropertyRef Name="pkID" />
+          </Key>
+          <Property Name="pkID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="languabge" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="flag" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="status" Type="bit" />
+        </EntityType>
+        <EntityType Name="Tble_About">
+          <Key>
+            <PropertyRef Name="pkID" />
+          </Key>
+          <Property Name="pkID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Item" Type="nvarchar(max)" />
+          <Property Name="Image" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Imageitle" Type="nvarchar" MaxLength="50" />
+          <Property Name="ImageAlt" Type="nvarchar" MaxLength="50" />
+          <Property Name="ButtonName" Type="nvarchar" MaxLength="50" />
+          <Property Name="UrlButtonLink" Type="nvarchar" MaxLength="100" />
+          <Property Name="Title" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view '26132_education.dbo.View_Article' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="View_Article">
+          <Key>
+            <PropertyRef Name="pkID" />
+            <PropertyRef Name="Title" />
+            <PropertyRef Name="Description" />
+            <PropertyRef Name="fkAuthor" />
+            <PropertyRef Name="Keywords" />
+            <PropertyRef Name="ImageTitle" />
+            <PropertyRef Name="ImageAlt" />
+            <PropertyRef Name="Contents" />
+            <PropertyRef Name="ImageSrc" />
+            <PropertyRef Name="DateModified" />
+          </Key>
+          <Property Name="pkID" Type="int" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="fkAuthor" Type="int" Nullable="false" />
+          <Property Name="Keywords" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ImageTitle" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ImageAlt" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Contents" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ImageSrc" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DateModified" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="firstname" Type="nvarchar" MaxLength="50" />
+          <Property Name="lastname" Type="nvarchar" MaxLength="50" />
+          <Property Name="address" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view '26132_education.dbo.View_courses' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -126,6 +203,18 @@ warning 6002: The table/view '26132_education.dbo.View_trainers' does not have a
           <Property Name="title" Type="nvarchar" MaxLength="100" />
           <Property Name="alt" Type="nvarchar" MaxLength="100" />
         </EntityType>
+        <Association Name="FK_Table_pages_Tbl_language">
+          <End Role="Tbl_language" Type="Self.Tbl_language" Multiplicity="0..1" />
+          <End Role="Table_pages" Type="Self.Table_pages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tbl_language">
+              <PropertyRef Name="pkID" />
+            </Principal>
+            <Dependent Role="Table_pages">
+              <PropertyRef Name="fkLangID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Table_teacher_Tbl_img">
           <End Role="Tbl_img" Type="Self.Tbl_img" Multiplicity="1" />
           <End Role="Table_teacher" Type="Self.Table_teacher" Multiplicity="*" />
@@ -189,12 +278,33 @@ warning 6002: The table/view '26132_education.dbo.View_trainers' does not have a
         <EntityContainer Name="educationDatabaseStoreContainer">
           <EntitySet Name="Table_category" EntityType="Self.Table_category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Table_events" EntityType="Self.Table_events" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Table_pages" EntityType="Self.Table_pages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="table_student" EntityType="Self.table_student" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Table_teacher" EntityType="Self.Table_teacher" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_admins" EntityType="Self.tbl_admins" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tbl_article" EntityType="Self.Tbl_article" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tbl_Banners" EntityType="Self.Tbl_Banners" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tbl_course" EntityType="Self.Tbl_course" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tbl_img" EntityType="Self.Tbl_img" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tbl_language" EntityType="Self.Tbl_language" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tble_About" EntityType="Self.Tble_About" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="View_Article" EntityType="Self.View_Article" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [View_Article].[pkID] AS [pkID], 
+    [View_Article].[Title] AS [Title], 
+    [View_Article].[Description] AS [Description], 
+    [View_Article].[fkAuthor] AS [fkAuthor], 
+    [View_Article].[Keywords] AS [Keywords], 
+    [View_Article].[ImageTitle] AS [ImageTitle], 
+    [View_Article].[ImageAlt] AS [ImageAlt], 
+    [View_Article].[Contents] AS [Contents], 
+    [View_Article].[ImageSrc] AS [ImageSrc], 
+    [View_Article].[DateModified] AS [DateModified], 
+    [View_Article].[firstname] AS [firstname], 
+    [View_Article].[lastname] AS [lastname], 
+    [View_Article].[address] AS [address]
+    FROM [dbo].[View_Article] AS [View_Article]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="View_courses" EntityType="Self.View_courses" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [View_courses].[pkID] AS [pkID], 
@@ -223,6 +333,10 @@ warning 6002: The table/view '26132_education.dbo.View_trainers' does not have a
     [View_trainers].[alt] AS [alt]
     FROM [dbo].[View_trainers] AS [View_trainers]</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="FK_Table_pages_Tbl_language" Association="Self.FK_Table_pages_Tbl_language">
+            <End Role="Tbl_language" EntitySet="Tbl_language" />
+            <End Role="Table_pages" EntitySet="Table_pages" />
+          </AssociationSet>
           <AssociationSet Name="FK_Table_teacher_Tbl_img" Association="Self.FK_Table_teacher_Tbl_img">
             <End Role="Tbl_img" EntitySet="Tbl_img" />
             <End Role="Table_teacher" EntitySet="Table_teacher" />
@@ -314,6 +428,15 @@ warning 6002: The table/view '26132_education.dbo.View_trainers' does not have a
             <End Role="Table_teacher" EntitySet="Table_teacher" />
             <End Role="Tbl_article" EntitySet="Tbl_article" />
           </AssociationSet>
+          <EntitySet Name="Tbl_Banners" EntityType="educationDatabase.Tbl_Banners" />
+          <EntitySet Name="Tble_About" EntityType="educationDatabase.Tble_About" />
+          <EntitySet Name="Tbl_language" EntityType="educationDatabase.Tbl_language" />
+          <EntitySet Name="Table_pages" EntityType="educationDatabase.Table_pages" />
+          <AssociationSet Name="FK_Table_pages_Tbl_language" Association="educationDatabase.FK_Table_pages_Tbl_language">
+            <End Role="Tbl_language" EntitySet="Tbl_language" />
+            <End Role="Table_pages" EntitySet="Table_pages" />
+          </AssociationSet>
+          <EntitySet Name="View_Article" EntityType="educationDatabase.View_Article" />
         </EntityContainer>
         <EntityType Name="View_courses">
           <Key>
@@ -467,6 +590,95 @@ warning 6002: The table/view '26132_education.dbo.View_trainers' does not have a
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Tbl_Banners">
+          <Key>
+            <PropertyRef Name="pkID" />
+          </Key>
+          <Property Name="pkID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Image" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Url" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ButtonName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ImgAlt" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Imgitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Tble_About">
+          <Key>
+            <PropertyRef Name="pkID" />
+          </Key>
+          <Property Name="pkID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Item" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Image" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Imageitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ImageAlt" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ButtonName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UrlButtonLink" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Tbl_language">
+          <Key>
+            <PropertyRef Name="pkID" />
+          </Key>
+          <Property Name="pkID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="languabge" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="flag" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="status" Type="Boolean" />
+          <NavigationProperty Name="Table_pages" Relationship="educationDatabase.FK_Table_pages_Tbl_language" FromRole="Tbl_language" ToRole="Table_pages" />
+        </EntityType>
+        <EntityType Name="Table_pages">
+          <Key>
+            <PropertyRef Name="pkID" />
+          </Key>
+          <Property Name="pkID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Keywords" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Action" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="fkLangID" Type="Int32" />
+          <Property Name="Defaults" Type="Boolean" />
+          <NavigationProperty Name="Tbl_language" Relationship="educationDatabase.FK_Table_pages_Tbl_language" FromRole="Table_pages" ToRole="Tbl_language" />
+        </EntityType>
+        <Association Name="FK_Table_pages_Tbl_language">
+          <End Type="educationDatabase.Tbl_language" Role="Tbl_language" Multiplicity="0..1" />
+          <End Type="educationDatabase.Table_pages" Role="Table_pages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tbl_language">
+              <PropertyRef Name="pkID" />
+            </Principal>
+            <Dependent Role="Table_pages">
+              <PropertyRef Name="fkLangID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="View_Article">
+          <Key>
+            <PropertyRef Name="pkID" />
+            <PropertyRef Name="Title" />
+            <PropertyRef Name="Description" />
+            <PropertyRef Name="fkAuthor" />
+            <PropertyRef Name="Keywords" />
+            <PropertyRef Name="ImageTitle" />
+            <PropertyRef Name="ImageAlt" />
+            <PropertyRef Name="Contents" />
+            <PropertyRef Name="ImageSrc" />
+            <PropertyRef Name="DateModified" />
+          </Key>
+          <Property Name="pkID" Type="Int32" Nullable="false" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="fkAuthor" Type="Int32" Nullable="false" />
+          <Property Name="Keywords" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ImageTitle" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ImageAlt" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Contents" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImageSrc" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DateModified" Type="String" Nullable="false" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="firstname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="lastname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -579,6 +791,77 @@ warning 6002: The table/view '26132_education.dbo.View_trainers' does not have a
           <EntitySetMapping Name="Tbl_article">
             <EntityTypeMapping TypeName="educationDatabase.Tbl_article">
               <MappingFragment StoreEntitySet="Tbl_article">
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="ImageSrc" ColumnName="ImageSrc" />
+                <ScalarProperty Name="Contents" ColumnName="Contents" />
+                <ScalarProperty Name="ImageAlt" ColumnName="ImageAlt" />
+                <ScalarProperty Name="ImageTitle" ColumnName="ImageTitle" />
+                <ScalarProperty Name="Keywords" ColumnName="Keywords" />
+                <ScalarProperty Name="fkAuthor" ColumnName="fkAuthor" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="pkID" ColumnName="pkID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tbl_Banners">
+            <EntityTypeMapping TypeName="educationDatabase.Tbl_Banners">
+              <MappingFragment StoreEntitySet="Tbl_Banners">
+                <ScalarProperty Name="Imgitle" ColumnName="Imgitle" />
+                <ScalarProperty Name="ImgAlt" ColumnName="ImgAlt" />
+                <ScalarProperty Name="ButtonName" ColumnName="ButtonName" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="pkID" ColumnName="pkID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tble_About">
+            <EntityTypeMapping TypeName="educationDatabase.Tble_About">
+              <MappingFragment StoreEntitySet="Tble_About">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="UrlButtonLink" ColumnName="UrlButtonLink" />
+                <ScalarProperty Name="ButtonName" ColumnName="ButtonName" />
+                <ScalarProperty Name="ImageAlt" ColumnName="ImageAlt" />
+                <ScalarProperty Name="Imageitle" ColumnName="Imageitle" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Item" ColumnName="Item" />
+                <ScalarProperty Name="pkID" ColumnName="pkID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tbl_language">
+            <EntityTypeMapping TypeName="educationDatabase.Tbl_language">
+              <MappingFragment StoreEntitySet="Tbl_language">
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="flag" ColumnName="flag" />
+                <ScalarProperty Name="languabge" ColumnName="languabge" />
+                <ScalarProperty Name="pkID" ColumnName="pkID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Table_pages">
+            <EntityTypeMapping TypeName="educationDatabase.Table_pages">
+              <MappingFragment StoreEntitySet="Table_pages">
+                <ScalarProperty Name="Defaults" ColumnName="Defaults" />
+                <ScalarProperty Name="fkLangID" ColumnName="fkLangID" />
+                <ScalarProperty Name="Action" ColumnName="Action" />
+                <ScalarProperty Name="Keywords" ColumnName="Keywords" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="pkID" ColumnName="pkID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="View_Article">
+            <EntityTypeMapping TypeName="educationDatabase.View_Article">
+              <MappingFragment StoreEntitySet="View_Article">
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="lastname" ColumnName="lastname" />
+                <ScalarProperty Name="firstname" ColumnName="firstname" />
                 <ScalarProperty Name="DateModified" ColumnName="DateModified" />
                 <ScalarProperty Name="ImageSrc" ColumnName="ImageSrc" />
                 <ScalarProperty Name="Contents" ColumnName="Contents" />

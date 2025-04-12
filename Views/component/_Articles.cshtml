@@ -1,0 +1,21 @@
+﻿@using mentorproject.Models
+@model ArticleHomeViewModel
+
+@{
+    foreach (View_Article item in Model.article)
+    {
+        <div class="col-md-6 d-flex align-items-stretch">
+            <div class="card">
+                <div class="card-img">
+                    <img src="~/AdminAssets/img/ImgArticle/@item.ImageSrc" alt="...">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title"><a href="">@item.Title</a></h5>
+                    <p class="fst-italic text-center">@item.DateModified</p>
+                    <p class="card-text">@item.Description</p>
+                </div>
+            </div>
+        </div>
+    }
+}
+

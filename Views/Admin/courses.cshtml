@@ -147,7 +147,7 @@
                                                             </div>
 
 
-                                                            <form class="col-sm-6" enctype="multipart/form-data" id="formData">
+                                                            <form class="col-sm-6 imgForm" enctype="multipart/form-data" id="imgform_@item.pkID">
                                                                 <div style="display:none" class="row mb-3">
                                                                     <label for="inputText" class="col-sm-12 col-form-label">شناسه عکس</label>
                                                                     <div class="col-sm-12">
@@ -179,7 +179,7 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <button id="imgCourseConfirm_@item.pkID" type="button" class="btn btn-primary subbtn">تایید اطلاعات</button>
+                                                                <button id="imgCourseConfirm_@item.pkID" type="submit" class="btn btn-primary subbtn">تایید اطلاعات</button>
                                                             </form>
 
 
@@ -333,18 +333,19 @@
 
         });
 
-        $(".subbtn").click(function (event) {
-            showLoader();
+        $(".imgForm").submit(function (event) {
             event.preventDefault();  // previnting from reloading the web page
+            showLoader();
+
             var imgTag = $(this).attr("id");
             var tagSplit = imgTag.split("_");
             tagSplit = tagSplit[1];
-            var img = $(`#imgTag_${tagSplit}`);
+            var img2 = $(`#imgTag_${tagSplit}`);
 
 
 
 
-            var formData = new FormData($("#formData")[0]);
+            var formData = new FormData($(this)[0]);
 
 
             $.ajax({
@@ -363,7 +364,7 @@
                             text: res.message,
                         });
 
-                        $(img).attr("src", `/AdminAssets/img/ImgCourse/${res.reff}?t=${new Date().getTime()}`);
+                        $(img2).attr("src", `/AdminAssets/img/ImgCourse/${res.reff}?t=${new Date().getTime()}`);
                     }
                     else {
                         Swal.fire({

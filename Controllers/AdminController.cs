@@ -10,6 +10,8 @@ using System.Web.Security;
 using System.IO;
 using System.Web.Helpers;
 using System.Web.UI;
+using System.Web.Script.Serialization;
+using System.Web.UI.WebControls;
 
 
 namespace mentorproject.Controllers
@@ -42,6 +44,27 @@ namespace mentorproject.Controllers
 
             return View();
 
+        }
+
+        public ActionResult editTemplate()
+        {
+            Session["editmode"] = "yes";
+
+            return View();
+        }
+
+        public ActionResult editmode(string mode)
+        {
+            Session["editmode"]= mode;
+
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult signOut()
+        {
+            Response.Cookies["lc"].Expires = DateTime.Now.AddDays(-1);
+
+            return View("Login");
         }
 
         public ActionResult Login_check(string email, string pass)
@@ -156,14 +179,21 @@ namespace mentorproject.Controllers
 
                     if (imgsrc != null)
                     {
+                        string stringDate = DateTime.Now.ToString();
+                        stringDate = stringDate.Replace("/", "_");
+                        stringDate = stringDate.Replace(":", "_");
+                        stringDate = stringDate.Replace(" ", "_");
+
 
                         if (imgsrc.ContentLength > 10000 && imgsrc.ContentLength < 10000000)
                         {
                             var prefixName = imgsrc.FileName.Split('.');
-                            fileName = Path.GetFileName("ci_" + coursepkID.ToString() + "." + prefixName[1]);
+                            fileName = Path.GetFileName("ci_" + stringDate + "." + prefixName[1]);
                             var path = Path.Combine(Server.MapPath("~/AdminAssets/img/ImgCourse"), fileName);
                             imgsrc.SaveAs(path);
                             imgFileName.address = fileName;
+                            context.SaveChanges();
+
                         }
                         else
                         {
@@ -475,7 +505,7 @@ namespace mentorproject.Controllers
                     if (p.ImageArticle.ContentLength > 10000 && p.ImageArticle.ContentLength < 10000000)
                     {
                         var prefixName = p.ImageArticle.FileName.Split('.');
-                        fileName = Path.GetFileName("ci_" + stringDate + "." + prefixName[1]);
+                        fileName = Path.GetFileName("ai_" + stringDate + "." + prefixName[1]);
                         var path = Path.Combine(Server.MapPath("~/AdminAssets/img/ImgArticle"), fileName);
                         p.ImageArticle.SaveAs(path);
 
@@ -509,7 +539,7 @@ namespace mentorproject.Controllers
                     if (p.ImageArticle.ContentLength > 10000 && p.ImageArticle.ContentLength < 10000000)
                     {
                         var prefixName = p.ImageArticle.FileName.Split('.');
-                        fileName = Path.GetFileName("ci_" + stringDate + "." + prefixName[1]);
+                        fileName = Path.GetFileName("ai_" + stringDate + "." + prefixName[1]);
                         var path = Path.Combine(Server.MapPath("~/AdminAssets/img/ImgArticle"), fileName);
                         p.ImageArticle.SaveAs(path);
                         editp.ImageSrc = fileName;
@@ -547,10 +577,170 @@ namespace mentorproject.Controllers
         }
 
 
+        public ActionResult pageList()
+        {
+            List<pageData> pageList = new List<pageData>();
+            pageList = context.Table_pages.Select(x => new pageData { pkID = x.pkID, Title = x.Title }).ToList();
+            return View(pageList);
+
+        }
+        [HttpGet]
+        public ActionResult page(int id) 
+        {
+            pageListData pageData = new pageListData();
+            var pages = context.Table_pages.Where(x => x.pkID == id).Single();
+            pageData.pkID = id;
+            pageData.Title=pages.Title;
+            pageData.Description=pages.Description;
+            pageData.Keywords = pages.Keywords;
+            
+
+            return View(pageData);
+        }
+
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult page(pageListData pd)
+        {
+            var pageData = context.Table_pages.Where(x=>x.pkID == pd.pkID).Single();
+            pageData.pkID=pd.pkID;
+            pageData.Title=pd.Title;
+            pageData.Description=pd.Description;
+            pageData.Keywords=pd.Keywords;
+
+            context.SaveChanges();
+            pd.Status = true;
+            pd.Message = "تغییرات ایجاد شد...";
+
+            
+               
+            return View(pd); 
+        }
+
+        [HttpPost]
+        public ActionResult textEdit(string id,string content)
+        {
+
+            if (validation())
+            {
+                try
+                {
+                    var elementId = id.Split('-');
+                    int ID = int.Parse(elementId[1]);
+                    if (elementId[0] == "Banners")
+                    {
+                        var bannerData = context.Tbl_Banners.Where(x => x.pkID == ID).Single();
+                        var property = bannerData.GetType().GetProperty(elementId[2]);
+
+                        if (property != null)     //check if The property exists before trying to set its value
+                        {
+                            property.SetValue(bannerData, Convert.ChangeType(content, property.PropertyType));  //check if The value is converted to the correct type.
+                        }
+
+                    }
+                    else if (elementId[0] == "About")
+                    {
+                        var aboutData = context.Tble_About.Where(x => x.pkID == ID).Single();
+                        var property = aboutData.GetType().GetProperty(elementId[2]);
+
+                        if (property != null)     //check if The property exists before trying to set its value
+                        {
+                            property.SetValue(aboutData, Convert.ChangeType(content, property.PropertyType));  //check if The value is converted to the correct type.
+                        }
+                    }
+                    context.SaveChanges();
+                    return Json(new { status = true, m = "" }, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception ex) {
+
+                    return Json(new {status=false,m=ex.Message}, JsonRequestBehavior.AllowGet);
+                
+                }
+                    
+                
+            }
+            return Json(new { status = false, m = "validation failed!!!" }, JsonRequestBehavior.AllowGet);
+
+        }
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult EditImage(string id, string Imageitle, string ImageAlt, HttpPostedFileBase Image)
+        {
+
+            if (validation()) 
+            {
+                try
+                {
+                    string stringDate = DateTime.Now.ToString();
+                    stringDate = stringDate.Replace("/", "_");
+                    stringDate = stringDate.Replace(":", "_");
+                    stringDate = stringDate.Replace(" ", "_");
+
+                    string imagefile = "";
+                    string[] name = id.Split('-');
+                    int ID = int.Parse(name[1]);
+                    if (name[0] == "Banners")
+                    {
+                        var res = context.Tbl_Banners.Where(x => x.pkID == ID).Single();
+                        res.Imgitle = Imageitle;
+                        res.ImgAlt = ImageAlt;
+
+                        if (Image != null)
+                        {
+                            var path1 = Path.Combine(Server.MapPath("~/assets/img/Banners"), res.Image);
+                            if (System.IO.File.Exists(path1))
+                            {
+                                System.IO.File.Delete(path1);
+                            }
+                            var prefixName=Image.FileName.Split('.');
+                            imagefile = Path.GetFileName("EImage_" + stringDate + "." + prefixName[1]);
+                            var path = Path.Combine(Server.MapPath("~/assets/img/Banners"), imagefile);
+                            Image.SaveAs(path);
+                            res.Image = imagefile;
+                        }
+                        context.SaveChanges();
+                    }
+                    else if (name[0] == "About")
+                    {
+                        var res = context.Tble_About.Where(x => x.pkID == ID).Single();
+                        res.Imageitle = Imageitle;
+                        res.ImageAlt = ImageAlt;
+
+                        if (Image != null)
+                        {
+                            var path1 = Path.Combine(Server.MapPath("~/assets/img/About"), res.Image);
+                            if (System.IO.File.Exists(path1))
+                            {
+                                System.IO.File.Delete(path1);
+                            }
+                            var prefixName = Image.FileName.Split('.');
+                            imagefile = Path.GetFileName("EImage_" + stringDate + "." + prefixName[1]);
+                            var path = Path.Combine(Server.MapPath("~/assets/img/About"), imagefile);
+                            Image.SaveAs(path);
+                            res.Image = imagefile;
+
+                        }
+                        context.SaveChanges();
+                    }
+
+                    return Json(new { status = true,message = "تغییر تصویر بنر انجام شد"}, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { status = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+
+                }
+            }
+            return Json(new { status = false, message = "validation failed!!!" }, JsonRequestBehavior.AllowGet);
+
+
+
+        }
+
         private bool validation()
         {
             if (Request.Cookies["lc"].Value == "null") { Response.Redirect("~/admin/login"); }
-            if (Request.Cookies["lc"].Value == "") { Response.Redirect("~/Home/login"); }
+            if (Request.Cookies["lc"].Value == "") { Response.Redirect("~/admin/login"); }
 
             var bytes = Convert.FromBase64String(Request.Cookies["lc"].Value);
             var output = MachineKey.Unprotect(bytes);

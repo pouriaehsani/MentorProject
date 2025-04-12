@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "pageList";
+    Layout = "~/Views/shared/_adminLayout.cshtml";
+}
+@using mentorproject.Models
+@model IEnumerable<mentorproject.Models.pageData>
+<div class="row">
+    <div class="col-lg-9">
+        <div class="card">
+            <div class="card-body">
+
+
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+
+                            <th scope="col">عنوان صفحه</th>
+
+                            <th scope="col">عملیات</th>
+
+                        </tr>
+                    </thead>
+
+                    @foreach (pageData page in Model)
+                    {
+
+                        <tr>
+
+                            <td>@page.Title</td>
+                            
+                            <td>
+                                <a class="btn btn-primary" href="page/@page.pkID">تغییرات</a>
+                                <button id="deleteTeacher_@page.pkID" type="submit" class="btn btn-danger delbtn">حذف صفحات</button>
+                            </td>
+                        </tr>
+
+                    }
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+

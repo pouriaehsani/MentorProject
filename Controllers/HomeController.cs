@@ -14,47 +14,57 @@ namespace mentorproject.Controllers
         // GET: Home
         public ActionResult Index()
         {
-           
-
-            return View();
+            ViewBag.title = "index";
+            GeneralModelView model = new GeneralModelView();
+            model.Pages = context.Table_pages.Where(x => x.pkID == 1).Single();
+            
+            return View(model);
         }
 
         public ActionResult About()
         {
-            return View();
+            ViewBag.title = "about";
+            GeneralModelView model = new GeneralModelView();
+            model.Pages = context.Table_pages.Where(x => x.pkID == 2).Single();
+            return View(model);
         }
 
         public ActionResult Courses()
         {
-
-            return View();
+            ViewBag.title = "courses";
+            GeneralModelView model = new GeneralModelView();
+            model.Pages = context.Table_pages.Where(x => x.pkID == 3).Single();
+            model.Courses=context.View_courses.ToList();
+            return View(model);
 
         }
         public ActionResult Trainers()
         {
-
-            return View();
+            ViewBag.title = "trainers";
+            GeneralModelView model = new GeneralModelView();
+            model.Pages = context.Table_pages.Where(x => x.pkID == 5).Single();
+            model.Teachers = context.View_trainers.ToList();
+            return View(model);
 
         }
 
         public ActionResult Events()
         {
+            ViewBag.title = "events";
+            GeneralModelView model = new GeneralModelView();
+            model.Pages = context.Table_pages.Where(x => x.pkID == 4).Single();
 
-            return View();
-
-        }
-
-        public ActionResult Pricing()
-        {
-
-            return View();
+            return View(model);
 
         }
 
         public ActionResult Contact()
         {
+            ViewBag.title = "contact";
+            GeneralModelView model = new GeneralModelView();
+            model.Pages = context.Table_pages.Where(x => x.pkID == 6).Single();
 
-            return View();
+            return View(model);
 
         }
 
@@ -71,5 +81,11 @@ namespace mentorproject.Controllers
 
         }
 
+        public ActionResult setLanguage(int id)
+        {
+            Response.Cookies["langID"].Value = id.ToString();
+            Response.Cookies["langID"].Expires = DateTime.Now.AddDays(500);
+            return RedirectToAction("Index");
+        }
     }
 }

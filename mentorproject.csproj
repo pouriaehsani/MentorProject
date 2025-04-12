@@ -431,6 +431,7 @@
     <Content Include="assets\img\trainers\trainer-2.jpg" />
     <Content Include="assets\img\trainers\trainer-3-2.jpg" />
     <Content Include="assets\img\trainers\trainer-3.jpg" />
+    <Content Include="assets\js\editing.js" />
     <Content Include="assets\js\jquery3.7.1.js" />
     <Content Include="assets\js\main.js" />
     <Content Include="assets\scss\Readme.txt" />
@@ -500,12 +501,16 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\componentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ArticleHomeViewModel.cs" />
     <Compile Include="Models\articleListModel.cs" />
     <Compile Include="Models\articleMedel.cs" />
+    <Compile Include="Models\GeneralModelView.cs" />
+    <Compile Include="Models\MenuModel.cs" />
     <Compile Include="Models\Model1.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -521,10 +526,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\pageData.cs" />
+    <Compile Include="Models\pageListData.cs" />
     <Compile Include="Models\Table_category.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Table_events.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Table_pages.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\table_student.cs">
@@ -533,16 +543,28 @@
     <Compile Include="Models\Table_teacher.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Tble_About.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tbl_admins.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Tbl_article.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Tbl_Banners.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Tbl_course.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Tbl_img.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Tbl_language.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\View_Article.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\View_courses.cs">
@@ -685,7 +707,6 @@
     <Content Include="Views\Home\courses.cshtml" />
     <Content Include="Views\Home\trainers.cshtml" />
     <Content Include="Views\Home\events.cshtml" />
-    <Content Include="Views\Home\pricing.cshtml" />
     <Content Include="Views\Home\contact.cshtml" />
     <Content Include="Views\shared\partial views\_counter.cshtml" />
     <Content Include="Views\Home\_counter2.cshtml" />
@@ -702,6 +723,15 @@
     <Content Include="Views\Admin\createTeachers.cshtml" />
     <Content Include="Views\Admin\article.cshtml" />
     <Content Include="Views\Admin\articleList.cshtml" />
+    <Content Include="Views\Admin\pageList.cshtml" />
+    <Content Include="Views\Admin\page.cshtml" />
+    <Content Include="Views\component\_menu.cshtml" />
+    <Content Include="Views\component\_Banners.cshtml" />
+    <Content Include="Views\component\_About.cshtml" />
+    <Content Include="Views\Admin\editTemplate.cshtml" />
+    <Content Include="Views\component\_Courses.cshtml" />
+    <Content Include="Views\component\_Teachers.cshtml" />
+    <Content Include="Views\component\_Articles.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -712,6 +742,8 @@
   <ItemGroup>
     <Folder Include="AdminAssets\img\ImgArticle\" />
     <Folder Include="App_Data\" />
+    <Folder Include="assets\img\About\" />
+    <Folder Include="assets\img\Banners\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
