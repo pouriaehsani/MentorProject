@@ -5,7 +5,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="620c2f30aed74cc59b17d511651e5340" Name="Diagram1" ZoomLevel="64">
-        <EntityTypeShape EntityType="educationDatabase.Table_category" Width="1.5" PointX="13.375" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="educationDatabase.Table_category" Width="1.5" PointX="18.625" PointY="6.25" IsExpanded="true" />
         <EntityTypeShape EntityType="educationDatabase.Table_events" Width="1.5" PointX="16.875" PointY="6.25" IsExpanded="true" />
         <EntityTypeShape EntityType="educationDatabase.table_student" Width="1.5" PointX="11.625" PointY="5.625" IsExpanded="true" />
         <EntityTypeShape EntityType="educationDatabase.tbl_admins" Width="1.5" PointX="15.125" PointY="6.25" IsExpanded="true" />
@@ -20,6 +20,12 @@
         <AssociationConnector Association="educationDatabase.FK_Tbl_course_Tbl_img" />
         <EntityTypeShape EntityType="educationDatabase.Tbl_article" Width="1.5" PointX="2.75" PointY="4.625" />
         <AssociationConnector Association="educationDatabase.FK_Tbl_article_Table_teacher" />
+        <EntityTypeShape EntityType="educationDatabase.Tbl_Banners" Width="1.5" PointX="4.625" PointY="1.375" />
+        <EntityTypeShape EntityType="educationDatabase.Tble_About" Width="1.5" PointX="2.875" PointY="1.25" />
+        <EntityTypeShape EntityType="educationDatabase.Tbl_language" Width="1.5" PointX="6.375" PointY="1.875" />
+        <EntityTypeShape EntityType="educationDatabase.Table_pages" Width="1.5" PointX="13.375" PointY="5.25" />
+        <AssociationConnector Association="educationDatabase.FK_Table_pages_Tbl_language" />
+        <EntityTypeShape EntityType="educationDatabase.View_Article" Width="1.5" PointX="8.625" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

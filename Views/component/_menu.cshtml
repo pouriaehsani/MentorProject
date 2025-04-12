@@ -1,0 +1,48 @@
+﻿@using mentorproject.Models
+@model MenuModel
+@{
+    string classActive = "";
+}
+
+<header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+
+        <a href="/Home/index" class="logo d-flex align-items-center me-auto">
+            <!-- Uncomment the line below if you also wish to use an image logo -->
+            <!-- <img src="/assets/img/logo.png" alt=""> -->
+            <h1 class="sitename">mentor</h1>
+        </a>
+
+        <nav id="navmenu" class="navmenu">
+            <ul>
+
+                @{ 
+                    foreach (Table_pages item in Model.Pages)
+                    {
+                        if (item.Action == ViewBag.page)
+                        {
+                            classActive = "active";
+                        }
+                        else
+                        {
+                            classActive = "";
+                        }
+                        <li><a href="/Home/@item.Action" class="@classActive">@item.Title<br></a></li>
+                    }
+                }
+
+                <li class="dropdown">
+                    <a href="#"><span>زبان|language</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                    <ul>
+                        <li><a href="@Url.Action("setLanguage", "home", new {id=1})">FA</a></li>
+                        <li><a href="@Url.Action("setLanguage", "home", new {id=2})">EN</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        </nav>
+
+        <a class="btn-getstarted" href="/Home/courses">شروع کنید</a>
+
+    </div>
+</header>

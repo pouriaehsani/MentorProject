@@ -1,7 +1,14 @@
 ﻿
 @{
     Layout = null;
+    if (Request.Cookies["lc"] == null)
+    {
+        Response.Redirect("~/admin/login");
+    }
 }
+@Html.AntiForgeryToken()
+@using mentorproject.Models
+@model GeneralModelView
 
 <!DOCTYPE html>
 <html lang="en">
@@ -9,9 +16,9 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Index - Mentor Bootstrap Template</title>
-    <meta name="description" content="">
-    <meta name="keywords" content="">
+    <title>@Model.Pages.Title</title>
+    <meta name="description" content="@Model.Pages.Description">
+    <meta name="keywords" content="@Model.Pages.Keywords">
 
     <!-- Favicons -->
     <link href="/assets/img/favicon.png" rel="icon">
@@ -21,6 +28,7 @@
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/iranian-sans" rel="stylesheet">
 
     <!-- Vendor CSS Files -->
     <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -43,32 +51,61 @@
 
 <body class="index-page">
 
-    <header id="header" class="header d-flex align-items-center sticky-top">
-        <div class="container-fluid container-xl position-relative d-flex align-items-center">
+    <!-- editModalText -->
+    <div class="modal fade" id="basicModalText" tabindex="-1" style="direction:rtl">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">ویرایش <span class="modalTitle"></span></h5>
 
-            <a href="/Home/index" class="logo d-flex align-items-center me-auto">
-                <!-- Uncomment the line below if you also wish to use an image logo -->
-                <!-- <img src="/assets/img/logo.png" alt=""> -->
-                <h1 class="sitename">mentor</h1>
-            </a>
-
-            <nav id="navmenu" class="navmenu">
-                <ul>
-                    <li><a href="~/Home/index" class="active">Home<br></a></li>
-                    <li><a href="/Home/about">About</a></li>
-                    <li><a href="/Home/courses">Courses</a></li>
-                    <li><a href="/Home/trainers">Trainers</a></li>
-                    <li><a href="/Home/events">Events</a></li>
-                    <li><a href="/Home/pricing">Pricing</a></li>        
-                    <li><a href="/Home/contact">Contact</a></li>
-                </ul>
-                <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-            </nav>
-
-            <a class="btn-getstarted" href="/Home/courses">Get Started</a>
-
+                </div>
+                <div class="modal-body">
+                    <textarea class="form-control" id="innerData" style="width:100% ; text-align:right" rows="10"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                    <button type="button" class="btn btn-primary" onclick="textEdit()">ذخیره</button>
+                </div>
+            </div>
         </div>
-    </header>
+    </div><!-- End Basic Modal-->
+    <!-- editModalImage -->
+    <div class="modal fade" id="editImage" tabindex="-1" style="direction:rtl">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">ویرایش <span class="modalTitle"></span></h5>
+
+                </div>
+                <div class="modal-body">
+                    <form enctype="multipart/form-data">
+
+                        <div class="col-12">
+                            <label form="Image" for="inputNumber" class="form-label">بارگزاری عکس</label>
+                            <input class="form-control" type="file" id="Image" name="Image">
+                        </div>
+                        <div class="col-12">
+                            <label for="Imageitle" class="form-label">عنوان عکس</label>
+                            <input type="text" class="form-control" name="Imageitle" id="Imageitle">
+                        </div>
+                        <div class="col-12">
+                            <label for="ImageAlt" class="form-label">متن جایگزین</label>
+                            <input type="text" class="form-control" name="ImageAlt" id="ImageAlt">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                    <button type="button" class="btn btn-primary" onclick="ImageEdit()">ذخیره</button>
+                </div>
+            </div>
+        </div>
+    </div><!-- End Basic Modal-->
+    <!-- navbar -->
+    @{
+        Html.RenderAction("_menu", "component", new { pn = ViewBag.title});
+
+    }
 
     <main class="main">
 
@@ -158,6 +195,7 @@
     <div id="preloader"></div>
 
     <!-- Vendor JS Files -->
+    <script src="~/Scripts/jquery-3.7.1.js"></script>
     <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/vendor/php-email-form/validate.js"></script>
     <script src="/assets/vendor/aos/aos.js"></script>
@@ -168,6 +206,17 @@
     <!-- Main JS File -->
     <script src="/assets/js/main.js"></script>
 
+    @{
+        if (Session["editmode"] != null)
+        {
+            if (Session["editmode"].ToString() == "yes")
+            {
+                <script src="~/assets/js/editing.js"></script>
+            }
+        }
+    }
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>

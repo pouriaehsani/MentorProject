@@ -1,0 +1,47 @@
+﻿@using mentorproject.Models
+@model Tble_About
+
+
+@{
+    string[] items = Model.Item.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+    
+}
+
+
+<div class="container">
+
+    <div class="row gy-4">
+
+        <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-up" data-aos-delay="100">
+            <img src="~/assets/img/About/@Model.Image" class="img-fluid editable" title="@Model.Imageitle" alt="@Model.ImageAlt" name="عکس" id="About-@Model.pkID-Image">
+        </div>
+
+        <div class="col-lg-6 order-2 order-lg-1 content" data-aos="fade-up" data-aos-delay="200">
+            <h3 class="editable" name="عنوان" id="About-@Model.pkID-Title">@Model.Title</h3>
+            <p class="fst-italic editable" name="توضیحات" id="About-@Model.pkID-Description">
+                @Model.Description
+            </p>
+            <ul class="editable" name="محتوا" id="About-@Model.pkID-Item">
+                @{
+                    foreach (var item in items)
+                    {
+                        <li><i class="bi bi-check-circle"></i> <span>@item</span></li>
+
+                    }
+
+
+                }
+            </ul>
+
+            @{
+                if (Model.pkID == 1)
+                {
+                    <a href="@Model.UrlButtonLink" class="read-more editable" name="لینک" id="About-@Model.pkID-ButtonName"><span>@Model.ButtonName</span><i class="bi bi-arrow-right"></i></a>
+
+                }
+            }
+        </div>
+
+    </div>
+
+</div>

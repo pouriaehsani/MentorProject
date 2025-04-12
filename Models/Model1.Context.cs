@@ -35,5 +35,10 @@ namespace mentorproject.Models
         public virtual DbSet<Tbl_course> Tbl_course { get; set; }
         public virtual DbSet<Tbl_img> Tbl_img { get; set; }
         public virtual DbSet<Tbl_article> Tbl_article { get; set; }
+        public virtual DbSet<Tbl_Banners> Tbl_Banners { get; set; }
+        public virtual DbSet<Tble_About> Tble_About { get; set; }
+        public virtual DbSet<Tbl_language> Tbl_language { get; set; }
+        public virtual DbSet<Table_pages> Table_pages { get; set; }
+        public virtual DbSet<View_Article> View_Article { get; set; }
     }
 }
