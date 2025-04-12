@@ -12,8 +12,7 @@ $(document).ready(function () {
         var namee = $(element).attr("name");
         $(".modalTitle").html(namee);
         console.log(element);
-        console.log(parent);
-        var elementtype = $(element).prop("nodeName");
+]        var elementtype = $(element).prop("nodeName");
 
         if (elementtype == "IMG") {
             $("#editImage").modal("show");
